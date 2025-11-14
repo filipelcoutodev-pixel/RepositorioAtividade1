@@ -22,6 +22,8 @@ public class ProdutosDAO {
     ResultSet resultset;
     ArrayList<ProdutosDTO> listagem = new ArrayList<>();
     
+    
+    //Método Cadastrar Produtos
      public void cadastrarProduto(ProdutosDTO produto) {
         Connection conn = new conectaDAO().connectDB();
         PreparedStatement pstm = null;
@@ -42,11 +44,35 @@ public class ProdutosDAO {
         }
     }
 
-    
-    public ArrayList<ProdutosDTO> listarProdutos(){
-        
-        return listagem;
+    //Método Listar produtos
+   public ArrayList<ProdutosDTO> listarProdutos() {
+        ArrayList<ProdutosDTO> lista = new ArrayList<>();
+        Connection conn = new conectaDAO().connectDB();
+        PreparedStatement pstm;
+        ResultSet rs;
+
+        try {
+            String sql = "SELECT * FROM produtos";
+            pstm = conn.prepareStatement(sql);
+            rs = pstm.executeQuery();
+
+            while (rs.next()) {
+                ProdutosDTO produto = new ProdutosDTO();
+                produto.setId(rs.getInt("id"));
+                produto.setNome(rs.getString("nome"));
+                produto.setValor(rs.getInt("valor"));
+                produto.setStatus(rs.getString("status"));
+
+                lista.add(produto);
+            }
+
+        } catch (Exception e) {
+            System.out.println("Erro ao listar produtos: " + e.getMessage());
+        }
+
+        return lista;
     }
+
     
     
     
