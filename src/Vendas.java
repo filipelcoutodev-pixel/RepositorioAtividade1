@@ -1,3 +1,8 @@
+
+import java.util.List;
+import javax.swing.JOptionPane;
+import javax.swing.table.DefaultTableModel;
+
 /*
  * Click nbfs://nbhost/SystemFileSystem/Templates/Licenses/license-default.txt to change this license
  * Click nbfs://nbhost/SystemFileSystem/Templates/GUIForms/JFrame.java to edit this template
@@ -8,12 +13,30 @@
  * @author FilipeLuizCouto
  */
 public class Vendas extends javax.swing.JFrame {
-
-    /**
-     * Creates new form Vendas
-     */
+     public void listarvendidos(){
+         try {
+             ProdutosDAO dao = new ProdutosDAO();
+             List<ProdutosDTO> vendidos = dao.listarProdutosVendidos();
+             
+             DefaultTableModel model = (DefaultTableModel) tblProdutosVendidos.getModel();
+             model.setRowCount(0); //Limpa a tabela
+             
+             for(ProdutosDTO p : vendidos){
+                 model.addRow( new Object[]{
+                     p.getId(),
+                     p.getNome(),
+                     p.getValor(),
+                     p.getStatus()
+             });
+                 
+             }
+         } catch (Exception e) {
+             JOptionPane.showMessageDialog(null, "Erro ao listar Produtos Vendidos"+e.getMessage());
+         }
+     }
     public Vendas() {
         initComponents();
+        listarvendidos();
     }
 
     /**
